@@ -1,0 +1,66 @@
+factible(S: CjtoSolucion, x: Entero)
+    c_act = c[x]
+    Para i desde 0 hasta longitud(S)
+        si S[i] == x:
+            c_act = c_act - 1
+        finsi
+    finpara
+    devolver c_act > 0
+
+insertar(S: CjtoSolucion, x: Entero)
+    insertarFinal(S, x)
+
+objetivo(S: CjtoSolucion)
+    bt = 0
+    Para i desde 0 hasta nt
+        bt += b[S[i]][i]
+    finpara
+    devolver bt
+
+seleccionar(C: CjtoCandidatos, j: entero)
+    max_b = b[C[0]][j]
+    candidato = C[0]
+    Para i desde 1 hasta longitud(C):
+        si max_b < b[C[i]][j]:
+            max_b = b[C[i]][j]
+            candidato = C[i]
+        finsi
+    finpara
+    devolver candidato
+
+solucion(S: CjtoSolucion):
+    c_copia = copiar(c)
+    Para i desde 0 hasta nt:
+        si c_copia[S[i]] > 0 AND b[S[i], i] > 0:
+            c_copia[S[i]] = c_copia[S[i]] - 1
+        sino:
+            devolver falso
+        finsi
+    finpara
+    devolver verdadero
+
+actualizar_cjto(C: CjtoCandidatos, S: CjtoSolucion, x: Entero)
+    cont = 0
+    Para i desde 0 hasta longitud(S)
+        si S[i] == x:
+            cont += 1
+    finpara
+    si cont == c[x]:
+        C = C - {x}
+    finsi
+
+voraz (C: CjtoCandidatos; var S: CjtoSolución)
+    S:= Ø
+    trabajo_act = 0
+    mientras (C != Ø) Y NO solución(S) Y trabajo_act < nt hacer
+        x:= seleccionar(C, trabajo_act)
+        si factible(S, x) entonces
+            insertar(S, x)
+            actualizar_cjto(C, S, x)
+            trabajo_act++
+        finsi
+    finmientras
+    si NO solución(S) entonces
+        devolver 0 
+    finsi
+
