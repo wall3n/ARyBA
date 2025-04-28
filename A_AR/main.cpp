@@ -1,4 +1,6 @@
 #include <iostream>
+#include <vector>
+#include "avance-rapido.hpp"
 
 using namespace std;
 
@@ -8,10 +10,10 @@ int main(void){
 
     for(int i = 0; i < nCasos; i++){
         int nw, nt;
-        cin >> nw;
-        cin >> nt;
-        int b[nw][nt];
-        int c[nw];
+        cin >> nw >> nt ;
+
+        vector<vector<int>> b(nw, vector<int>(nt));
+        vector<int> c(nw);
 
         for(int j = 0; j < nw; j++){
             for(int z = 0; z < nt; z++){
@@ -23,7 +25,18 @@ int main(void){
             cin >> c[j];
         }
 
-        
+        vector<int> C(nw);
+        for(int i = 0; i < nw; i++){
+            C[i] = i;
+        }
+
+        vector<int> S = avance_rapido(C, b, c, nw, nt);
+
+        cout << objetivo(S, b) << endl;
+        for(int i = 0; i < S.size(); i++){
+            cout << S[i] << " "; 
+        }
+        cout << endl;
     }
     return 0;
 }
