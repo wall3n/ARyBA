@@ -3,12 +3,7 @@
 
 #include <vector>
 
-struct Solucion {
-    int status;
-    vector<int> cjtosolucion;
-};
+std::vector<int> avance_rapido(std::vector<int> C, const std::vector<std::vector<int>> &b, const std::vector<int> &c, int nw, int nt);
 
-Solucion avance_rapido(vector<int> C, vector<int> b, vector<int> c, int nW, int nT);
-
-int objetivo(vector<int> S, vector<int> b);
+int objetivo(const std::vector<int> &S, const std::vector<std::vector<int>> &b);
 #endif
