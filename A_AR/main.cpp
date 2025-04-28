@@ -13,7 +13,7 @@ bool factible(const vector<int> &S, int x, const vector<int> &c){
     return c_act > 0;
 }
 
-void insertar(vector<int> &S, int x, const vector<vector<int>> &b, int t){
+void insertar(vector<int> &S, int x, const vector<vector<int> > &b, int t){
     if(b[x][t] > 0){
         S.push_back(x);
     } else {
@@ -21,7 +21,7 @@ void insertar(vector<int> &S, int x, const vector<vector<int>> &b, int t){
     }
 }
 
-int objetivo(const vector<int> &S, const vector<vector<int>> &b){
+int objetivo(const vector<int> &S, const vector<vector<int> > &b){
     int bt = 0;
     for(int i = 0; i < S.size(); i++){
         if(S[i] == -1){
@@ -33,7 +33,7 @@ int objetivo(const vector<int> &S, const vector<vector<int>> &b){
     return bt;
 }
 
-int seleccionar(const vector<int> &C, int j, const vector<vector<int>> &b){
+int seleccionar(const vector<int> &C, int j, const vector<vector<int> > &b){
     int candidato = C[0];
     int max_b = b[C[0]][j];
     for(int i = 0; i < C.size(); i++){
@@ -46,7 +46,7 @@ int seleccionar(const vector<int> &C, int j, const vector<vector<int>> &b){
 
 }
 
-bool solucion(const vector<int> &S, const vector<int> &c, const vector<vector<int>> &b, int nt){
+bool solucion(const vector<int> &S, const vector<int> &c, const vector<vector<int> > &b, int nt){
     if(S.size() != nt){ 
         return false; 
     }
@@ -82,7 +82,7 @@ void actualizar_cjto(vector<int> &C, const vector<int> &S, const vector<int> &c,
     }
 }
 
-vector<int> avance_rapido(vector<int> C, const vector<vector<int>> &b, const vector<int> &c, int nw, int nt){
+vector<int> avance_rapido(vector<int> C, const vector<vector<int> > &b, const vector<int> &c, int nw, int nt){
     vector<int> S;
     int trabajo_act = 0;
 
