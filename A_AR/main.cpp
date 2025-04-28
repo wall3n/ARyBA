@@ -119,15 +119,15 @@ int main(void){
         }
 
         vector<int> C(nw);
-        for(int i = 0; i < nw; i++){
-            C[i] = i;
+        for(int j = 0; j < nw; j++){
+            C[j] = j;
         }
 
         vector<int> S = avance_rapido(C, b, c, nw, nt);
 
         cout << objetivo(S, b) << endl;
-        for(int i = 0; i < S.size(); i++){
-            cout << S[i] << " "; 
+        for(int j = 0; j < S.size(); j++){
+            cout << S[j] << " "; 
         }
         cout << endl;
     }
