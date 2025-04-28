@@ -98,6 +98,9 @@ vector<int> avance_rapido(vector<int> C, const vector<vector<int> > &b, const ve
 }
 
 int main(void){
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+
     int nCasos;
     cin >> nCasos;
 
@@ -105,7 +108,7 @@ int main(void){
         int nw, nt;
         cin >> nw >> nt ;
 
-        vector<vector<int>> b(nw, vector<int>(nt));
+        vector<vector<int> > b(nw, vector<int>(nt));
         vector<int> c(nw);
 
         for(int j = 0; j < nw; j++){
