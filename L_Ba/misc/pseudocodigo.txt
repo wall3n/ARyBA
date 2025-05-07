@@ -1,0 +1,80 @@
+// PSEUDOCODIGO PROBLEMA L: BACKTRACKING
+
+// Genera la sig talla para el nivel (voluntario) actual.
+Generar(nivel, s, disponibles, tallas)
+	si s[nivel] != -1 entonces
+		si s[nivel] == 0 entonces
+			disponibles[tallas[nivel].t1] := disponibles[tallas[nivel].t1] + 1
+		sino si s[nivel] == 1 entonces
+			disponibles[tallas[nivel].t2] := disponibles[tallas[nivel].t2] + 1
+
+	s[nivel] := s[nivel] + 1
+	
+	si s[nivel] == 0 entonces
+		disponibles[tallas[nivel].t1] := disponibles[tallas[nivel].t1] - 1
+	sino si s[nivel] == 1 entonces
+		disponibles[tallas[nivel].t2] := disponibles[tallas[nivel].t2] - 1
+
+// Comprueba si la tupla (s[1],..,s[nivel]) es sol válida
+bool: Solución(nivel: entero, M: entero)
+	devolver (nivel == M)
+
+// Comprueba si a partir de sol puede haber sol valida
+// SI NO rechazarán todos los descendientes 
+// (podamos si no hay camisetas disponibles)
+bool: Criterio(disponibles)
+	para i de 0 a 5 hacer
+		si disponibles[i] < 0 entonces
+			devolver falso
+	devolver verdadero
+
+// Devuelve true si hay más tallas para el voluntario actual (s[nivel])
+// aún no generados
+bool: MasHermanos(nivel, s)
+	devolver s[nivel] < 1
+
+// Retrocede un nivel en el árbol de soluciones. 
+// Disminuye en 1 el valor de nivel
+// Actualiza la disponibilidad de camisetas y solución actual
+// Quita elementos retrocedidos y "lo deja todo como estaba"
+Retroceder(nivel, s, disponibles, tallas)
+	si s[nivel] == 0 entonces
+		disponibles[tallas[nivel].t1] := disponibles[tallas[nivel].t1] + 1
+	sino si s[nivel] == 1 entonces
+		disponibles[tallas[nivel].t2] := disponibles[tallas[nivel].t2] + 1
+	s[nivel] := -1
+	nivel := nivel - 1
+
+/* Metodo general
+* - Variables
+*		- Representación de la solución con un árbol binario.
+*		- s: array[1..M] de {-1, 0, 1}
+*			s[i] = 0 -> el voluntario i-esimo usa talla 1
+*			s[i] = 1 -> el voluntario i-esimo usa talla 2
+*			s[i] = -1 -> valor de inicialización (nº no estudiado)
+*		- s_INICIAL = (-1, -1, ..., -1)
+*		- fin: valdrá true cuando se haya encontrado solución
+*		- disponibles: array[0..5] de entero
+*		 	disponibles[i] corresponde al nº de camisetas que quedan de 
+*			la talla i (0: XXL, 1: XL, ..., 5: XS)
+*		- Inicialmente para todas las tallas hay mismo número de disponibles
+*			disponibles_INICIAL[i] = N/6
+*/
+bool: Backtracking(M, tallas, disponibles)
+	nivel := 1
+	s := vector[1..M] con todos los valores -1
+	fin := falso
+	repetir
+		Generar(nivel, s, disponibles, tallas)
+		si Solución(nivel, M) y Criterio(disponibles) entonces
+			fin := verdadero
+		sino si Criterio(disponibles) entonces
+			nivel := nivel + 1
+			si nivel ≤ M entonces
+				s[nivel] := -1
+		sino
+			mientras NOT MasHermanos(nivel, s) Y nivel > 0 hacer
+				Retroceder(nivel, s, disponibles, tallas)
+	hasta fin = verdadero O nivel = 0
+	devolver fin
+	
