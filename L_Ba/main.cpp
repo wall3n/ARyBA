@@ -1,140 +1,71 @@
+#include "backtracking.hpp"
 #include <iostream>
 #include <vector>
 #include <string>
+#include <cstdlib>
+#include <fstream>
+#include <chrono>
 
 using namespace std;
 
-const int NUM_TALLAS = 6;
-
-struct PosiblesTallas {
-	int t1;
-	int t2;
-};
-
-int asignaTalla(const string& talla) {
-    if (talla == "XXL") return 0;
-    if (talla == "XL")  return 1;
-    if (talla == "L")   return 2;
-    if (talla == "M")   return 3;
-    if (talla == "S")   return 4;
-    if (talla == "XS")  return 5;
-    return -1; 
-}
-
-// Comprueba si ya hemos analizado a todos los voluntarios
-bool Solucion(int nivel, int M) {
-    return nivel == M;
-}
-
-// Comprueba que queden camisetas disponibles
-bool Criterio(const vector<int>& disponibles) {
-	
-    for (int i = 0; i < 6; ++i) {
-        if (disponibles[i] < 0) {
-			return false;
-		}
-    }
-    return true;
-}
-
-// Comprueba si aún le queda otra talla por probarse
-bool MasHermanos(int nivel, const vector<int>& s) {
-    return s[nivel] < 1; 
-}
-
-// Genera una nueva talla para el voluntario del nivel
-void Generar(int nivel, const vector<PosiblesTallas>& tallas, vector<int>& s, vector<int>& disponibles) {
-    
-    // Si tenía una camiseta asignada, se restablece la disponibilidad
-    if (s[nivel] != -1) {
-		int tallaAnterior = -1;
-		if(s[nivel] == 0){
-			tallaAnterior = tallas[nivel].t1;
-		} else if (s[nivel] == 1) {
-			tallaAnterior = tallas[nivel].t2;
-		}
-        disponibles[tallaAnterior]++;
-    }
-	
-	// Intentar con sig talla
-    s[nivel]++;
-    
-    if (s[nivel] <= 1) {
-		int tallaNueva = -1;
-		if(s[nivel] == 0){
-			tallaNueva = tallas[nivel].t1;
-		}else if (s[nivel] == 1) {
-			tallaNueva = tallas[nivel].t2;
-		}
-        disponibles[tallaNueva]--;
-    }
-}
-
-// Retrocede un nivel y deshace lo asignado
-void Retroceder(int& nivel, const vector<PosiblesTallas>& tallas, vector<int>& s, vector<int>& disponibles) {
-    
-    int tallaAct = -1;
-    
-    if (s[nivel] == 0){
-		tallaAct = tallas[nivel].t1;
-    } else if (s[nivel] == 1) {
-		tallaAct = tallas[nivel].t2;
-	}
-	
-	// Deshace asignación
-    disponibles[tallaAct]++; 
-    s[nivel] = -1;
-    nivel--;
-}
-
-bool backtracking(int M, vector<PosiblesTallas>& tallas, vector<int>& disponibles) {
-    
-    vector<int> s(M + 1, -1); 
-    int nivel = 1;
-    bool fin = false;
-
-    while (nivel > 0 && !fin) {
-        Generar(nivel, tallas, s, disponibles);
-
-        if (Solucion(nivel, M) && Criterio(disponibles)) {
-            fin = true;
-        } else if (Criterio(disponibles)) {
-            nivel++;
-            if (nivel <= M) s[nivel] = -1;
-        } else {
-            while (nivel > 0 && !MasHermanos(nivel, s)) {
-                Retroceder(nivel, tallas, s, disponibles);
-            }
-        }
-    }
-
-    return fin;
-}
+vector<string> tallas = {"XXL", "XL", "L", "M", "S", "XS"};
 
 int main() {
-    int nCasos;
-    cin >> nCasos;
+    int opcion;
 
-    while (nCasos--) {
-        int N, M;
-        cin >> N >> M;
+    do {
+        cout << "========================" << endl;
+        cout << "         MENU" << endl;
+        cout << "========================" << endl;
+        cout << "1. Probar Backtracking" << endl;
+        cout << "2. Ayuda" << endl;
+        cout << "3. Salir" << endl;
+        cout << "Seleccione una opción: ";
+        cin >> opcion;
 
-        vector<PosiblesTallas> tallas(M + 1);
-        vector<int> disponibles(NUM_TALLAS, N / NUM_TALLAS);
+        if(opcion == 1){
+            int N, M;
+            cout << "Introduce el número total de camisetas: ";
+            cin >> N;
+            cout << "Introduce el número de voluntarios: ";
+            cin >> M;
 
-        for (int i = 1; i <= M; ++i) {
-            string t1, t2;
-            cin >> t1 >> t2;
-            tallas[i].t1 = asignaTalla(t1);
-            tallas[i].t2 = asignaTalla(t2);
+			vector<PosiblesTallas> tallas(M + 1);
+			vector<int> disponibles(NUM_TALLAS, N / NUM_TALLAS);
+			
+			cout << "A continuación debe introducir "<< M << " líneas de las dos tallas separadas por un espacio: "<<endl;
+			for (int i = 1; i <= M; ++i) {
+				string t1, t2;
+				cin >> t1 >> t2;
+				tallas[i].t1 = asignaTalla(t1);
+				tallas[i].t2 = asignaTalla(t2);
+			}
+
+			if (backtracking(M, tallas, disponibles)) {
+				cout << "YES" << endl;
+			} else {
+				cout << "NO" << endl;
+			}
         }
 
-        if (backtracking(M, tallas, disponibles)) {
-            cout << "YES" << endl;
-        } else {
-            cout << "NO" << endl;
+        if(opcion == 2){
+            cout << "=================================================" << endl;
+            cout << "              MENU DE AYUDA" << endl;
+            cout << "=================================================" << endl;
+            cout << "El formato de entrada del programa es el siguiente:" << endl;
+            cout << "1) La primera línea es el número total de casos de prueba." << endl;
+            cout << "2) Luego dos números separados por espacio: número de camisetas (N) y voluntarios (M)." << endl;
+            cout << "3) Después, M líneas con las 2 tallas que prefiere cada voluntario (XXL, XL, L, M, S o XS)." << endl;
+            cout << "=================================================" << endl;
         }
-    }
+
+        if(opcion == 3){
+            cout << "Saliendo..." << endl;
+        }
+
+        cout << endl;
+
+    } while (opcion != 3);
 
     return 0;
 }
