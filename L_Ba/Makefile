@@ -12,8 +12,8 @@ generador: build/generador.o build/backtracking.o
 build/main.o: src/main.cpp src/backtracking.hpp
 	g++ -c src/main.cpp -o build/main.o
 
-build/generador.o: src/generador-casos.cpp src/backtracking.hpp
-	g++ -c src/generador-casos.cpp -o build/generador.o
+build/generador.o: src/generador.cpp src/backtracking.hpp
+	g++ -c src/generador.cpp -o build/generador.o
 
 build/backtracking.o: src/backtracking.cpp src/backtracking.hpp
 	g++ -c src/backtracking.cpp -o build/backtracking.o
