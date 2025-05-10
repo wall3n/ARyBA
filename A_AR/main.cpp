@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>
 #include <vector>
 
@@ -21,13 +22,16 @@ void insertar(vector<int> &S, int x, const vector<vector<int> > &b, int t){
     }
 }
 
-int objetivo(const vector<int> &S, const vector<vector<int> > &b){
+int objetivo(const vector<int> &S, const vector<vector<int> > &b, int nt){
+    if((int) S.size() != nt){
+        return 0;
+    }
+
     int bt = 0;
     for(size_t i = 0; i < S.size(); i++){
         if(S[i] == -1){
-            bt = 0;
-            return bt;
-        }
+            return 0;
+        } 
         bt += b[S[i]][i];
     }
     return bt;
@@ -92,7 +96,9 @@ vector<int> avance_rapido(vector<int> C, const vector<vector<int> > &b, const ve
             insertar(S, x, b, trabajo_act);
             actualizar_cjto(C, S, c, x);
             trabajo_act++;
-        } 
+        } else {
+            C.erase(find(C.begin(), C.end(), x));
+        }
     }
     return S;
 }
@@ -128,8 +134,17 @@ int main(void){
 
         vector<int> S = avance_rapido(C, b, c, nw, nt);
 
-        cout << objetivo(S, b) << endl;
-        for(size_t j = 0; j < S.size(); j++){
+        int beneficio = 0;
+        if(solucion(S, c, b, nt)){
+            beneficio = objetivo(S, b, nt);
+        } else {
+            while(S.size() < (size_t)nt){
+                S.push_back(-1);
+            }
+        }
+
+        cout << beneficio << endl;
+        for(int j = 0; j < nt; j++){
             cout << S[j] << " "; 
         }
         cout << endl;
