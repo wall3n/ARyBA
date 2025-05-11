@@ -76,8 +76,9 @@ int main() {
             cout << "=================================================" << endl;
             cout << "El formato de entrada del programa es el siguiente:" << endl;
             cout << "1) La primera línea es el número total de casos de prueba." << endl;
-            cout << "2) Luego dos números separados por espacio: número de camisetas (N) y voluntarios (M)." << endl;
-            cout << "3) Después, M líneas con las 2 tallas que prefiere cada voluntario (XXL, XL, L, M, S o XS)." << endl;
+            cout << "2) Luego dos números separados por espacio: número de trabajadores (N) y número de tareas (M)." << endl;
+            cout << "3) Después, N lineas con M enteros que representan el beneficio que aporta cada trabajador a cada tarea." << endl;
+            cout << "4) Finalmente, una linea con N enteros que representan la capacidad de cada trabajador." << endl;
             cout << "=================================================" << endl;
         }
 
